@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anton Parkhomenko — AI Content Creator</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0D0D0F;
+  --bg2:      #141418;
+  --bg3:      #1C1C22;
+  --blue:     #2200FF;
+  --blue-l:   #4433FF;
+  --white:    #F4F4F6;
+  --muted:    #7A7A86;
+  --border:   rgba(255,255,255,0.08);
+  --r:        14px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  font-family:'Space Grotesk',sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  overflow-x:hidden;
+}
+
+/* ── LANG SWITCH ── */
+.lang-en .ru{display:none!important;}
+.lang-ru .en{display:none!important;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  height:64px;
+  background:rgba(13,13,15,0.85);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-size:15px;font-weight:600;
+  letter-spacing:-0.01em;
+  color:var(--white);
+  text-decoration:none;
+}
+.nav-logo span{color:var(--blue);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{
+  font-size:14px;font-weight:500;
+  color:var(--muted);text-decoration:none;
+  transition:color 0.15s;
+}
+.nav-links a:hover{color:var(--white);}
+.lang-btn{
+  font-size:13px;font-weight:600;
+  color:var(--muted);
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:100px;
+  padding:5px 14px;
+  cursor:pointer;
+  transition:color 0.15s,border-color 0.15s;
+}
+.lang-btn:hover{color:var(--white);border-color:rgba(255,255,255,0.2);}
+
+@media(max-width:640px){
+  nav{padding:0 20px;}
+  .nav-links{gap:16px;}
+  .nav-links a:not(.lang-btn){display:none;}
+}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:120px 48px 72px;
+  position:relative;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 40%, rgba(34,0,255,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(34,0,255,0.08) 0%, transparent 60%);
+  pointer-events:none;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:500;
+  color:var(--muted);
+  border:1px solid var(--border);
+  border-radius:100px;padding:5px 14px;
+  margin-bottom:28px;width:fit-content;
+}
+.hero-tag-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--blue);
+  box-shadow:0 0 8px rgba(34,0,255,0.8);
+}
+.hero-name{
+  font-size:clamp(52px,8vw,96px);
+  font-weight:700;
+  letter-spacing:-0.04em;
+  line-height:0.95;
+  margin-bottom:24px;
+}
+.hero-name em{
+  font-style:normal;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,0.25);
+}
+.hero-desc{
+  font-size:clamp(15px,1.6vw,18px);
+  font-weight:400;
+  color:var(--muted);
+  max-width:520px;
+  line-height:1.65;
+  margin-bottom:48px;
+}
+.hero-stats{
+  display:flex;gap:48px;flex-wrap:wrap;
+  margin-bottom:48px;
+  padding-top:40px;
+  border-top:1px solid var(--border);
+}
+.hero-stat{}
+.hero-stat-num{
+  font-size:clamp(28px,4vw,40px);
+  font-weight:700;
+  letter-spacing:-0.04em;
+  color:var(--white);
+  line-height:1;
+}
+.hero-stat-num span{color:var(--blue);}
+.hero-stat-lbl{
+  font-size:12px;font-weight:400;
+  color:var(--muted);margin-top:5px;
+}
+.hero-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--blue);
+  color:#fff;
+  font-size:15px;font-weight:600;
+  padding:14px 28px;
+  border-radius:100px;
+  text-decoration:none;
+  width:fit-content;
+  transition:background 0.15s,transform 0.15s;
+}
+.hero-cta:hover{background:var(--blue-l);transform:translateY(-1px);}
+
+@media(max-width:640px){
+  .hero{padding:100px 20px 56px;}
+  .hero-stats{gap:28px;}
+}
+
+/* ── SECTION SHARED ── */
+section{padding:96px 48px;}
+@media(max-width:640px){section{padding:64px 20px;}}
+
+.s-label{
+  font-size:11px;font-weight:600;
+  letter-spacing:0.08em;
+  color:var(--blue);
+  margin-bottom:16px;
+}
+.s-title{
+  font-size:clamp(28px,4vw,44px);
+  font-weight:700;
+  letter-spacing:-0.03em;
+  line-height:1.1;
+  margin-bottom:48px;
+}
+
+/* ── SKILLS ── */
+.skills-sec{background:var(--bg);}
+
+.skills-toggle{
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;
+  padding:20px 28px;
+  background:var(--bg2);
+  border-radius:var(--r);
+  margin-bottom:0;
+  user-select:none;
+  position:relative;
+  /* Скрываем дефолтный border — он нарисован через pseudo */
+  border:1px solid transparent;
+}
+
+/* Синяя полоса летит по ободу */
+.skills-toggle::before{
+  content:'';
+  position:absolute;
+  inset:-1px;
+  border-radius:calc(var(--r) + 1px);
+  padding:1px;
+  background:conic-gradient(
+    from var(--angle, 0deg),
+    transparent 0deg,
+    transparent 300deg,
+    #2200FF 330deg,
+    #6655ff 345deg,
+    #2200FF 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-spin 3s linear infinite;
+  pointer-events:none;
+}
+/* Статичный тёмный бордер под анимацией */
+.skills-toggle::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:var(--r);
+  border:1px solid var(--border);
+  pointer-events:none;
+  z-index:-1;
+}
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes border-spin{
+  to{ --angle: 360deg; }
+}
+.skills-toggle:hover::after{border-color:rgba(34,0,255,0.3);}
+.skills-toggle:hover .toggle-arrow{color:var(--white);}
+
+.toggle-left{display:flex;align-items:center;gap:14px;}
+.toggle-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--blue);
+  box-shadow:0 0 10px rgba(34,0,255,0.9);
+  flex-shrink:0;
+  animation:pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot{
+  0%,100%{box-shadow:0 0 6px rgba(34,0,255,0.7);}
+  50%{box-shadow:0 0 16px rgba(34,0,255,1),0 0 28px rgba(34,0,255,0.4);}
+}
+.toggle-label{
+  font-size:15px;font-weight:600;
+  color:var(--white);
+}
+.toggle-sub{
+  font-size:13px;font-weight:400;
+  color:var(--muted);
+  margin-left:4px;
+}
+.toggle-arrow{
+  color:var(--muted);
+  transition:transform 0.35s cubic-bezier(0.4,0,0.2,1), color 0.2s;
+  flex-shrink:0;
+}
+.skills-sec.open .toggle-arrow{
+  transform:rotate(180deg);
+  color:var(--white);
+}
+
+.skills-body{
+  display:grid;
+  grid-template-rows:0fr;
+  transition:grid-template-rows 0.4s cubic-bezier(0.4,0,0.2,1);
+  margin-top:0;
+}
+.skills-sec.open .skills-body{
+  grid-template-rows:1fr;
+  margin-top:16px;
+}
+.skills-body-inner{overflow:hidden;}
+
+.skills-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  padding-bottom:2px;
+}
+@media(max-width:900px){.skills-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.skills-grid{grid-template-columns:1fr;}}
+
+.skill-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:28px;
+  transition:border-color 0.2s;
+}
+.skill-card:hover{border-color:rgba(34,0,255,0.4);}
+.skill-icon{
+  width:40px;height:40px;
+  background:rgba(34,0,255,0.12);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;
+  color:var(--blue);
+}
+.skill-name{
+  font-size:15px;font-weight:600;
+  margin-bottom:8px;
+}
+.skill-desc{
+  font-size:13px;font-weight:400;
+  color:var(--muted);line-height:1.6;
+}
+.skill-tools{
+  margin-top:14px;
+  display:flex;flex-wrap:wrap;gap:6px;
+}
+.tool-tag{
+  font-size:11px;font-weight:500;
+  color:var(--muted);
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:3px 8px;
+}
+
+/* ── RESULTS ── */
+.results-sec{background:var(--bg2);}
+.results-big{
+  background:var(--blue);
+  border-radius:var(--r);
+  padding:40px;
+  margin-bottom:16px;
+}
+.rb-label{
+  font-size:11px;font-weight:600;
+  letter-spacing:0.08em;
+  color:rgba(255,255,255,0.5);
+  margin-bottom:28px;
+}
+.rb-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+@media(max-width:600px){
+  .rb-stats{grid-template-columns:repeat(2,1fr);gap:24px 0;}
+  .results-big{padding:28px 24px;}
+}
+.rb-stat{}
+.rb-stat:not(:last-child){
+  padding-right:28px;
+  border-right:1px solid rgba(255,255,255,0.18);
+  margin-right:28px;
+}
+@media(max-width:600px){
+  .rb-stat:not(:last-child){padding-right:0;border-right:none;margin-right:0;}
+}
+.rb-num{
+  font-size:clamp(32px,4.5vw,48px);
+  font-weight:700;
+  letter-spacing:-0.04em;
+  line-height:1;
+  color:#fff;
+}
+.rb-lbl{
+  font-size:12px;color:rgba(255,255,255,0.55);
+  margin-top:6px;line-height:1.4;
+}
+
+.cases-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+@media(max-width:680px){.cases-grid{grid-template-columns:1fr;}}
+
+.case-card{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:28px;
+  display:flex;flex-direction:column;
+}
+.case-card.blue-card{
+  background:var(--blue);
+  border-color:transparent;
+}
+.case-niche{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:500;
+  color:var(--muted);
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border);
+  border-radius:100px;
+  padding:4px 10px;
+  margin-bottom:14px;width:fit-content;
+}
+.case-card.blue-card .case-niche{
+  color:rgba(255,255,255,0.65);
+  background:rgba(255,255,255,0.12);
+  border-color:rgba(255,255,255,0.18);
+}
+.ndot{width:5px;height:5px;border-radius:50%;background:#22C55E;flex-shrink:0;}
+.case-title{
+  font-size:15px;font-weight:600;
+  line-height:1.4;margin-bottom:20px;flex:1;
+}
+.case-card.blue-card .case-title{color:#fff;}
+.case-nums{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:4px;
+}
+.cn{display:flex;flex-direction:column;gap:3px;}
+.cn-num{
+  font-size:clamp(18px,2.5vw,24px);
+  font-weight:700;letter-spacing:-0.03em;line-height:1;
+  color:var(--blue);
+}
+.case-card.blue-card .cn-num{color:#fff;}
+.cn-lbl{font-size:11px;font-weight:400;color:var(--muted);line-height:1.3;}
+.case-card.blue-card .cn-lbl{color:rgba(255,255,255,0.55);}
+.case-div{height:1px;background:var(--border);margin:18px 0 14px;}
+.case-card.blue-card .case-div{background:rgba(255,255,255,0.18);}
+.case-foot{
+  font-size:11px;font-weight:600;
+  letter-spacing:0.07em;
+  color:var(--muted);
+}
+.case-card.blue-card .case-foot{color:rgba(255,255,255,0.5);}
+
+/* ── WORKS ── */
+.works-sec{background:var(--bg);}
+
+/* Filter tabs */
+.works-filters{
+  display:flex;gap:8px;flex-wrap:wrap;
+  margin-bottom:32px;
+}
+.wf-btn{
+  font-size:13px;font-weight:500;
+  color:var(--muted);
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:100px;
+  padding:7px 16px;
+  cursor:pointer;
+  transition:all 0.15s;
+  white-space:nowrap;
+}
+.wf-btn:hover{color:var(--white);border-color:rgba(255,255,255,0.2);}
+.wf-btn.active{
+  background:var(--blue);
+  color:#fff;
+  border-color:var(--blue);
+}
+
+/* Category cards grid */
+.works-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+@media(max-width:900px){.works-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.works-grid{grid-template-columns:1fr;}}
+
+.work-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  cursor:pointer;
+  transition:border-color 0.2s,transform 0.2s;
+}
+.work-card:hover{border-color:rgba(34,0,255,0.45);transform:translateY(-3px);}
+.work-card.hidden{display:none;}
+
+/* Thumb with hover preview */
+.work-thumb{
+  aspect-ratio:16/9;
+  background:var(--bg3);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+.work-thumb-label{
+  position:absolute;
+  font-size:clamp(28px,4vw,44px);
+  font-weight:700;
+  color:rgba(255,255,255,0.05);
+  letter-spacing:-0.04em;
+  user-select:none;
+  z-index:0;
+}
+/* Static preview image — always visible */
+.work-thumb img.thumb-img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  z-index:1;
+  transition:opacity 0.3s;
+}
+/* Hover preview video/gif — fades in on hover */
+.work-thumb {
+  position: relative;
+  overflow: hidden;
+}
+
+.work-thumb .thumb-img,
+.work-thumb .thumb-preview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.work-thumb .thumb-preview {
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.work-card:hover .thumb-preview {
+  opacity: 1;
+}
+
+.work-card:hover .thumb-img {
+  opacity: 0;
+}
+
+.work-thumb-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0) 55%);
+  z-index:3;
+  display:flex;align-items:flex-end;justify-content:flex-start;
+  padding:12px;
+  transition:background 0.2s;
+}
+.work-card:hover .work-thumb-overlay{
+  background:linear-gradient(to top,rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.1) 65%);
+}
+.work-open-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:600;
+  color:#fff;
+  background:rgba(34,0,255,0.88);
+  border-radius:100px;
+  padding:6px 14px;
+  pointer-events:none;
+  transition:background 0.15s,transform 0.15s;
+}
+.work-card:hover .work-open-btn{background:var(--blue);transform:scale(1.04);}
+
+.work-count{
+  position:absolute;top:10px;right:10px;
+  font-size:11px;font-weight:600;
+  color:rgba(255,255,255,0.7);
+  background:rgba(0,0,0,0.5);
+  border-radius:100px;
+  padding:3px 9px;
+  z-index:4;
+}
+
+.work-info{padding:20px;}
+.work-style{
+  font-size:11px;font-weight:600;
+  letter-spacing:0.07em;color:var(--blue);
+  margin-bottom:6px;
+}
+.work-title{font-size:14px;font-weight:600;margin-bottom:10px;line-height:1.4;}
+.work-tools{display:flex;flex-wrap:wrap;gap:5px;}
+
+/* ── Works Modal (gallery) ── */
+.wmodal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.88);
+  z-index:200;
+  align-items:center;justify-content:center;
+  padding:24px;
+  backdrop-filter:blur(8px);
+}
+.wmodal-overlay.open{display:flex;}
+.wmodal{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:20px;
+  max-width:860px;width:100%;
+  max-height:90vh;overflow-y:auto;
+  padding:32px;
+}
+.wmodal-header{
+  display:flex;align-items:flex-start;
+  justify-content:space-between;gap:16px;
+  margin-bottom:24px;
+}
+.wmodal-title{font-size:20px;font-weight:700;letter-spacing:-0.02em;}
+.wmodal-close{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:50%;width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--white);flex-shrink:0;
+  transition:background 0.15s;
+}
+.wmodal-close:hover{background:var(--border);}
+
+/* Video grid inside modal — 2 колонки плиткой */
+.wmodal-list{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+@media(max-width:500px){.wmodal-list{grid-template-columns:1fr;}}
+.wmodal-item{
+  display:flex;flex-direction:column;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:border-color 0.15s,transform 0.15s;
+  text-decoration:none;
+  color:var(--white);
+}
+.wmodal-item:hover{border-color:rgba(34,0,255,0.45);transform:translateY(-2px);}
+.wmodal-item-thumb{
+  width:100%;aspect-ratio:16/9;
+  background:var(--bg);
+  overflow:hidden;position:relative;
+}
+.wmodal-item-thumb img{
+  width:100%;height:100%;object-fit:cover;
+  display:block;transition:transform 0.3s;
+}
+.wmodal-item:hover .wmodal-item-thumb img{transform:scale(1.04);}
+.wmodal-item-play{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,0.25);
+  transition:background 0.15s;
+}
+.wmodal-item:hover .wmodal-item-play{background:rgba(0,0,0,0.4);}
+.wmodal-item-play-icon{
+  width:36px;height:36px;
+  background:var(--blue);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+.wmodal-item-info{padding:12px 14px;}
+.wmodal-item-title{font-size:13px;font-weight:600;margin-bottom:3px;line-height:1.3;}
+.wmodal-item-sub{font-size:11px;color:var(--muted);line-height:1.4;}
+.wmodal-item-arrow{display:none;}
+
+/* ── ABOUT (collapsible, same style as skills) ── */
+.about-sec{background:var(--bg);padding-top:12px;padding-bottom:96px;}
+.about-toggle{
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;
+  padding:20px 28px;
+  background:var(--bg2);
+  border-radius:var(--r);
+  margin-bottom:0;
+  user-select:none;
+  position:relative;
+  border:1px solid transparent;
+}
+.about-toggle::before{
+  content:'';
+  position:absolute;
+  inset:-1px;
+  border-radius:calc(var(--r) + 1px);
+  padding:1px;
+  background:conic-gradient(
+    from var(--angle2, 0deg),
+    transparent 0deg,
+    transparent 300deg,
+    #2200FF 330deg,
+    #6655ff 345deg,
+    #2200FF 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-spin2 3s linear infinite;
+  pointer-events:none;
+}
+.about-toggle::after{
+  content:'';position:absolute;inset:0;
+  border-radius:var(--r);
+  border:1px solid var(--border);
+  pointer-events:none;z-index:-1;
+}
+@property --angle2 {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes border-spin2{ to{ --angle2: 360deg; } }
+.about-toggle:hover::after{border-color:rgba(34,0,255,0.3);}
+.about-toggle:hover .toggle-arrow{color:var(--white);}
+
+.about-body{
+  display:grid;
+  grid-template-rows:0fr;
+  transition:grid-template-rows 0.4s cubic-bezier(0.4,0,0.2,1);
+  margin-top:0;
+}
+.about-sec.open .about-body{
+  grid-template-rows:1fr;
+  margin-top:16px;
+}
+.about-body-inner{overflow:hidden;}
+.about-content{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:36px 40px;
+}
+.about-text{
+  font-size:15px;font-weight:400;
+  color:rgba(244,244,246,0.75);
+  line-height:1.75;
+  max-width:720px;
+}
+.about-text p{margin-bottom:14px;}
+.about-text p:last-child{margin-bottom:0;}
+@media(max-width:640px){.about-content{padding:24px 20px;}}
+
+/* ── PARTNER ── */
+.partner-sec{background:var(--bg2);}
+.partner-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+  padding:28px 32px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+}
+.partner-logo{
+  font-size:14px;font-weight:600;
+  color:var(--muted);
+  opacity:0.6;
+  transition:opacity 0.15s,color 0.15s;
+  white-space:nowrap;
+  padding:8px 20px;
+  border:1px solid var(--border);
+  border-radius:100px;
+  background:var(--bg2);
+}
+.partner-logo:hover{opacity:1;color:var(--white);border-color:rgba(255,255,255,0.18);}
+
+/* ── CONTACT ── */
+.contact-sec{
+  background:var(--blue);
+  text-align:center;
+  padding:96px 48px;
+}
+.contact-sec .s-title{margin-bottom:16px;}
+.contact-sub{
+  font-size:16px;color:rgba(255,255,255,0.65);
+  margin-bottom:40px;max-width:420px;margin-left:auto;margin-right:auto;
+}
+.contact-links{
+  display:flex;align-items:center;justify-content:center;
+  gap:12px;flex-wrap:wrap;
+}
+.contact-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:14px;font-weight:600;
+  color:#fff;
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:100px;
+  padding:12px 22px;
+  text-decoration:none;
+  transition:background 0.15s;
+}
+.contact-btn:hover{background:rgba(255,255,255,0.22);}
+.contact-btn.primary{
+  background:#fff;color:var(--blue);border-color:#fff;
+}
+.contact-btn.primary:hover{background:rgba(255,255,255,0.9);}
+
+@media(max-width:640px){.contact-sec{padding:64px 20px;}}
+</style>
+</head>
+<body class="lang-ru" id="body">
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#" class="nav-logo">Anton <span>Parkhomenko</span></a>
+  <div class="nav-links">
+    <a href="#skills" class="ru">Навыки</a>
+    <a href="#skills" class="en">Skills</a>
+    <a href="#results" class="ru">Результаты</a>
+    <a href="#results" class="en">Results</a>
+    <a href="#works" class="ru">Работы</a>
+    <a href="#works" class="en">Works</a>
+    <a href="#contact" class="ru">Контакты</a>
+    <a href="#contact" class="en">Contact</a>
+    <button class="lang-btn" onclick="toggleLang()">EN</button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-tag">
+    <span class="hero-tag-dot"></span>
+    <span class="ru">Открыт к предложениям</span>
+    <span class="en">Open to opportunities</span>
+  </div>
+  <h1 class="hero-name">
+    Anton<br><em>Parkhomenko</em>
+  </h1>
+  <p class="hero-desc ru">AI Content Creator — создаю видео, анимацию и визуальные концепции с помощью нейросетей. Специализация: вирусный контент для TikTok.</p>
+  <p class="hero-desc en">AI Content Creator — I produce videos, animations and visual concepts using neural networks. Specialisation: viral content for TikTok.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">54M<span>+</span></div>
+      <div class="hero-stat-lbl ru">просмотров суммарно</div>
+      <div class="hero-stat-lbl en">total views</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">72K<span>+</span></div>
+      <div class="hero-stat-lbl ru">подписчиков</div>
+      <div class="hero-stat-lbl en">followers</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">35–40<span>%</span></div>
+      <div class="hero-stat-lbl ru">удержание аудитории</div>
+      <div class="hero-stat-lbl en">audience retention</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">6<span>+</span></div>
+      <div class="hero-stat-lbl ru">проектов клиентов</div>
+      <div class="hero-stat-lbl en">client projects</div>
+    </div>
+  </div>
+  <a href="#contact" class="hero-cta">
+    <span class="ru">Написать мне</span>
+    <span class="en">Get in touch</span>
+    <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</section>
+
+<!-- ── RESULTS ── -->
+<section class="results-sec" id="results">
+  <div class="s-label ru">Доказанные результаты</div>
+  <div class="s-label en">Proven results</div>
+  <h2 class="s-title ru">Цифры из аналитики</h2>
+  <h2 class="s-title en">Numbers from analytics</h2>
+
+  <div class="results-big">
+    <div class="rb-label ru">СТАТИСТИКА — МОИ АККАУНТЫ</div>
+    <div class="rb-label en">STATS — MY OWN ACCOUNTS</div>
+    <div class="rb-stats">
+      <div class="rb-stat">
+        <div class="rb-num">54M+</div>
+        <div class="rb-lbl ru">Просмотров суммарно</div>
+        <div class="rb-lbl en">Total views</div>
+      </div>
+      <div class="rb-stat">
+        <div class="rb-num">72K+</div>
+        <div class="rb-lbl ru">Подписчиков</div>
+        <div class="rb-lbl en">Followers</div>
+      </div>
+      <div class="rb-stat">
+        <div class="rb-num">3.9M+</div>
+        <div class="rb-lbl ru">Лайков</div>
+        <div class="rb-lbl en">Likes</div>
+      </div>
+      <div class="rb-stat">
+        <div class="rb-num">457K+</div>
+        <div class="rb-lbl ru">Репостов</div>
+        <div class="rb-lbl en">Shares</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cases-grid">
+    <div class="case-card">
+      <div class="case-niche"><span class="ndot"></span><span class="ru">Бизнес-ниша</span><span class="en">Business niche</span></div>
+      <div class="case-title ru">С нуля до вирусного охвата за 30 дней</div>
+      <div class="case-title en">Zero to viral reach in 30 days</div>
+      <div class="case-nums">
+        <div class="cn"><span class="cn-num">23.8M</span><span class="cn-lbl ru">просмотров</span><span class="cn-lbl en">views</span></div>
+        <div class="cn"><span class="cn-num">+23.6K</span><span class="cn-lbl ru">подписчиков</span><span class="cn-lbl en">followers</span></div>
+        <div class="cn"><span class="cn-num">1.28M</span><span class="cn-lbl ru">взаимодействий</span><span class="cn-lbl en">engagements</span></div>
+      </div>
+      <div class="case-div"></div>
+      <div class="case-foot">98.1% <span class="ru">— холодная аудитория</span><span class="en">— cold audience</span></div>
+    </div>
+    <div class="case-card blue-card">
+      <div class="case-niche"><span class="ndot"></span><span class="ru">Спортивная ниша</span><span class="en">Sports niche</span></div>
+      <div class="case-title ru">9M просмотров за 90 дней. Органика</div>
+      <div class="case-title en">9M views in 90 days. Pure organic</div>
+      <div class="case-nums">
+        <div class="cn"><span class="cn-num">9M</span><span class="cn-lbl ru">просмотров</span><span class="cn-lbl en">views</span></div>
+        <div class="cn"><span class="cn-num">+13K</span><span class="cn-lbl ru">подписчиков</span><span class="cn-lbl en">followers</span></div>
+        <div class="cn"><span class="cn-num">99.9%</span><span class="cn-lbl ru">холодный охват</span><span class="cn-lbl en">cold reach</span></div>
+      </div>
+      <div class="case-div"></div>
+      <div class="case-foot ru">Органический рост — без рекламы</div>
+      <div class="case-foot en">Organic growth — zero ad spend</div>
+    </div>
+    <div class="case-card">
+      <div class="case-niche"><span class="ndot"></span><span class="ru">Познавательная ниша · USA</span><span class="en">Educational niche · USA</span></div>
+      <div class="case-title ru">10M просмотров за 2 месяца</div>
+      <div class="case-title en">10M views in 2 months</div>
+      <div class="case-nums">
+        <div class="cn"><span class="cn-num">10M</span><span class="cn-lbl ru">просмотров</span><span class="cn-lbl en">views</span></div>
+        <div class="cn"><span class="cn-num">24K</span><span class="cn-lbl ru">подписчиков</span><span class="cn-lbl en">followers</span></div>
+        <div class="cn"><span class="cn-num">203K</span><span class="cn-lbl ru">просм. профиля</span><span class="cn-lbl en">profile views</span></div>
+      </div>
+      <div class="case-div"></div>
+      <div class="case-foot ru">Познавательная ниша — USA аудитория</div>
+      <div class="case-foot en">Educational niche — USA audience</div>
+    </div>
+    <div class="case-card blue-card">
+      <div class="case-niche"><span class="ndot"></span><span class="ru">Развлекательная ниша · USA</span><span class="en">Entertainment niche · USA</span></div>
+      <div class="case-title ru">11M просмотров. Удержание 35–40%</div>
+      <div class="case-title en">11M views. 35–40% retention</div>
+      <div class="case-nums">
+        <div class="cn"><span class="cn-num">11M</span><span class="cn-lbl ru">просмотров</span><span class="cn-lbl en">views</span></div>
+        <div class="cn"><span class="cn-num">12K</span><span class="cn-lbl ru">подписчиков</span><span class="cn-lbl en">followers</span></div>
+        <div class="cn"><span class="cn-num">35–40%</span><span class="cn-lbl ru">удержание</span><span class="cn-lbl en">retention</span></div>
+      </div>
+      <div class="case-div"></div>
+      <div class="case-foot ru">Развлекательная ниша — USA аудитория</div>
+      <div class="case-foot en">Entertainment niche — USA audience</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WORKS ── -->
+<section class="works-sec" id="works">
+  <div class="s-label ru">Примеры работ</div>
+  <div class="s-label en">Selected works</div>
+  <h2 class="s-title ru">Проекты</h2>
+  <h2 class="s-title en">Projects</h2>
+
+  <div class="works-grid">
+
+    <!-- ═══════════════════════════════════════════════
+         КАРТОЧКА 1 — РЕАЛИЗМ
+         data-category — не менять, используется фильтром
+    ════════════════════════════════════════════════ -->
+    <div class="work-card" data-category="realism" onclick="openWorksModal('modal-realism')">
+      <div class="work-thumb">
+
+        <!-- ПРЕВЬЮ-КАРТИНКА (обложка, всегда видна)
+             Замени "" на прямую ссылку на картинку (i.ibb.co или imgbb)
+             Пример: "https://i.ibb.co/xxx/cover.jpg"
+             Соотношение сторон желательно 16:9 -->
+        <img class="thumb-img" src="https://i.ibb.co.com/vvD6Z77p/1-2.png" alt="Realism preview"
+             onerror="this.style.display='none'">
+
+        <!-- ПРЕВЬЮ-ВИДЕО (MP4, 3-5 сек, без звука) ИЛИ GIF — появляется при наведении
+             Замени "" на прямую ссылку на mp4/gif файл
+             Загрузи на: cloudinary.com (бесплатно) или любой хостинг
+             MP4 пример: "https://res.cloudinary.com/xxx/video/upload/preview.mp4"
+             GIF пример: "https://i.ibb.co/xxx/preview.gif" -->
+        <video
+  class="thumb-preview"
+  src="https://res.cloudinary.com/vqci1hjb/video/upload/v1794542727/%D0%A0%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%BC.mp4"
+  muted
+  loop
+  playsinline
+  preload="auto"
+></video>
+        <!-- Если хочешь GIF вместо видео — замени тег <video> на <img class="thumb-preview" src=""> -->
+
+        <div class="work-thumb-label">REALISM</div>
+        <div class="work-thumb-overlay">
+          <div class="work-open-btn">
+            <svg width="13" height="13" fill="none" viewBox="0 0 13 13"><path d="M4 2.5l5.5 4-5.5 4V2.5z" fill="currentColor"/></svg>
+            <span class="ru">Открыть галерею</span><span class="en">Open gallery</span>
+          </div>
+        </div>
+        <!-- Количество видео в этой категории — поменяй цифру -->
+        <div class="work-count">2 видео</div>
+      </div>
+      <div class="work-info">
+        <div class="work-style ru">Реализм</div>
+        <div class="work-style en">Realism</div>
+        <div class="work-title ru">Видео в стиле ультра реализм</div>
+        <div class="work-title en">Ultra-realistic style video</div>
+        <div class="work-tools">
+          <span class="tool-tag">Nano Banana</span>
+          <span class="tool-tag">Seedance 2.5</span>
+          <span class="tool-tag">ElevenLabs</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         КАРТОЧКА 2 — DISNEY
+    ════════════════════════════════════════════════ -->
+    <div class="work-card" data-category="disney" onclick="openWorksModal('modal-disney')">
+      <div class="work-thumb">
+        <!-- ПРЕВЬЮ-КАРТИНКА -->
+        <img class="thumb-img" src="https://i.ibb.co.com/4RZb9xXg/2-2.png" alt="Disney preview" onerror="this.style.display='none'">
+        <!-- ПРЕВЬЮ-ВИДЕО/GIF при наведении -->
+        <video
+  class="thumb-preview"
+  src="https://res.cloudinary.com/vqci1hjb/video/upload/v1794545678/Disney.mp4"
+  muted
+  loop
+  playsinline
+  preload="auto"
+></video>
+        <div class="work-thumb-label">DISNEY</div>
+        <div class="work-thumb-overlay">
+          <div class="work-open-btn">
+            <svg width="13" height="13" fill="none" viewBox="0 0 13 13"><path d="M4 2.5l5.5 4-5.5 4V2.5z" fill="currentColor"/></svg>
+            <span class="ru">Открыть галерею</span><span class="en">Open gallery</span>
+          </div>
+        </div>
+        <div class="work-count">2 видео</div>
+      </div>
+      <div class="work-info">
+        <div class="work-style">Disney / Pixar Animation</div>
+        <div class="work-title ru">Love Story | Happy Birthday | Вирусный контент</div>
+        <div class="work-title en">Love Story | Happy Birthday | Viral Content</div>
+        <div class="work-tools">
+          <span class="tool-tag">Nano Banana Pro</span>
+          <span class="tool-tag">Seedance 2.0</span>
+          <span class="tool-tag">ElevenLabs</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         КАРТОЧКА 3 — ARCANE
+    ════════════════════════════════════════════════ -->
+    <div class="work-card" data-category="arcane" onclick="openWorksModal('modal-arcane')">
+      <div class="work-thumb">
+        <img class="thumb-img" src="https://i.ibb.co.com/Nnn3TXK5/Pix-Verse-Image-Effect-prompt.png" alt="Arcane preview" onerror="this.style.display='none'">
+        <video
+  class="thumb-preview"
+  src="https://res.cloudinary.com/vqci1hjb/video/upload/v1794546687/Arcane.mp4"
+  muted
+  loop
+  playsinline
+  preload="auto"
+></video>
+        <div class="work-thumb-label">ARCANE</div>
+        <div class="work-thumb-overlay">
+          <div class="work-open-btn">
+            <svg width="13" height="13" fill="none" viewBox="0 0 13 13"><path d="M4 2.5l5.5 4-5.5 4V2.5z" fill="currentColor"/></svg>
+            <span class="ru">Открыть галерею</span><span class="en">Open gallery</span>
+          </div>
+        </div>
+        <div class="work-count">1 видео</div>
+      </div>
+      <div class="work-info">
+        <div class="work-style ru">Arcane · Cyberpunk</div>
+        <div class="work-style en">Arcane · Cyberpunk</div>
+        <div class="work-title ru">Живописная анимация</div>
+        <div class="work-title en">Painterly Animation</div>
+        <div class="work-tools">
+          <span class="tool-tag">Claude</span>
+          <span class="tool-tag">Seedream</span>
+          <span class="tool-tag">Seedance</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         КАРТОЧКА 4 — РЕКЛАМНЫЕ КРЕАТИВЫ
+    ════════════════════════════════════════════════ -->
+    <div class="work-card" data-category="pixel" onclick="openWorksModal('modal-pixel')">
+      <div class="work-thumb">
+        <img class="thumb-img" src="https://i.ibb.co.com/84xc2GZt/hom.png" alt="Pixel preview" onerror="this.style.display='none'">
+        <video class="thumb-preview" src="" muted loop playsinline
+               onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
+        <div class="work-thumb-label">PIXEL</div>
+        <div class="work-thumb-overlay">
+          <div class="work-open-btn">
+            <svg width="13" height="13" fill="none" viewBox="0 0 13 13"><path d="M4 2.5l5.5 4-5.5 4V2.5z" fill="currentColor"/></svg>
+            <span class="ru">Открыть галерею</span><span class="en">Open gallery</span>
+          </div>
+        </div>
+        <div class="work-count">1 видео</div>
+      </div>
+      <div class="work-info">
+        <div class="work-style ru">Рекламные креативы</div>
+        <div class="work-style en">Ad Creatives</div>
+        <div class="work-title ru">Рекламные видео для бизнеса</div>
+        <div class="work-title en">Promotional videos for business</div>
+        <div class="work-tools">
+          <span class="tool-tag">Nano Banana</span>
+          <span class="tool-tag">Kling AI</span>
+          <span class="tool-tag">Seedance</span>
+          <span class="tool-tag">ElevenLabs</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         КАРТОЧКА 5 — ВЕРТИКАЛЬНЫЕ РОЛИКИ
+    ════════════════════════════════════════════════ -->
+    <div class="work-card" data-category="ad" onclick="openWorksModal('modal-ad')">
+      <div class="work-thumb">
+        <img class="thumb-img" src="https://i.ibb.co.com/fz7ny5hs/6-2.png" alt="Ad preview" onerror="this.style.display='none'">
+        <video class="thumb-preview" src="" muted loop playsinline
+               onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
+        <div class="work-thumb-label">3D AD</div>
+        <div class="work-thumb-overlay">
+          <div class="work-open-btn">
+            <svg width="13" height="13" fill="none" viewBox="0 0 13 13"><path d="M4 2.5l5.5 4-5.5 4V2.5z" fill="currentColor"/></svg>
+            <span class="ru">Открыть галерею</span><span class="en">Open gallery</span>
+          </div>
+        </div>
+        <div class="work-count">1 видео</div>
+      </div>
+      <div class="work-info">
+        <div class="work-style ru">Вертикальный контент</div>
+        <div class="work-style en">Vertical Сontent</div>
+        <div class="work-title ru">Вертикальные видео для соц-сетей</div>
+        <div class="work-title en">Vertical videos for social media</div>
+        <div class="work-tools">
+          <span class="tool-tag">GPT Image</span>
+          <span class="tool-tag">Kling AI</span>
+          <span class="tool-tag">Grok</span>
+          <span class="tool-tag">ElevenLabs</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     МОДАЛКИ — ГАЛЕРЕИ ВИДЕО ПО КАТЕГОРИЯМ
+
+     Как добавить видео в галерею:
+     1. Скопируй блок <a class="wmodal-item">
+     2. В href вставь YouTube-ссылку на видео
+     3. В thumb-img вставь ссылку на превью (скриншот с YouTube или своя картинка)
+     4. Поменяй название и описание
+
+     YouTube ссылка:
+     - Обычное: https://youtu.be/ВИДЕО_ID
+     - Shorts:  https://youtube.com/shorts/ВИДЕО_ID
+══════════════════════════════════════════════════ -->
+
+<!-- Modal: Реализм -->
+<div class="wmodal-overlay" id="modal-realism" onclick="wmodalBgClose(event,'modal-realism')">
+  <div class="wmodal">
+    <div class="wmodal-header">
+      <div class="wmodal-title">Реализм</div>
+      <button class="wmodal-close" onclick="closeWorksModal('modal-realism')">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 2l11 11M13 2L2 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="wmodal-list">
+
+      <!-- ВИДЕО 1 — замени href на YouTube-ссылку -->
+      <a class="wmodal-item" href="https://youtu.be/CkS8Jy3K7_8?si=Qj56nvg2agcgEWB_" target="_blank">
+        <div class="wmodal-item-thumb">
+          <!-- Превью-картинка: замени "" на ссылку на скриншот -->
+          <img src="https://i.ibb.co.com/Fb6mj6L0/Chat-GPT-Image-16-2026-20-17-36.png" alt="" onerror="this.style.display='none'">
+          <div class="wmodal-item-play">
+            <div class="wmodal-item-play-icon">
+              <svg width="12" height="12" fill="none" viewBox="0 0 12 12"><path d="M3 2l7 4-7 4V2z" fill="white"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="wmodal-item-info">
+          <div class="wmodal-item-title">Shred of Mercy</div>
+          <!-- Описание: замени на своё -->
+          <div class="wmodal-item-sub">Короткометражный фильм · Claude, Nano Banana, Seedance 2.5</div>
+        </div>
+        <svg class="wmodal-item-arrow" width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <!-- ВИДЕО 2 — замени href на YouTube-ссылку -->
+      <a class="wmodal-item" href="https://youtube.com/shorts/Zhp-lenUpO0?feature=share" target="_blank">
+        <div class="wmodal-item-thumb">
+          <img src="https://i.ibb.co.com/4qyL0pc/Man-leaning-against-blue-car-2-K-20260929152856.jpg" alt="" onerror="this.style.display='none'">
+          <div class="wmodal-item-play">
+            <div class="wmodal-item-play-icon">
+              <svg width="12" height="12" fill="none" viewBox="0 0 12 12"><path d="M3 2l7 4-7 4V2z" fill="white"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="wmodal-item-info">
+          <div class="wmodal-item-title">Реклама Авто</div>
+          <div class="wmodal-item-sub">Рекламный ролик · Nano Banana, Seedance 2.5, ElevenLabs</div>
+        </div>
+        <svg class="wmodal-item-arrow" width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <!-- Добавь ещё видео скопировав блок выше -->
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Disney -->
+<div class="wmodal-overlay" id="modal-disney" onclick="wmodalBgClose(event,'modal-disney')">
+  <div class="wmodal">
+    <div class="wmodal-header">
+      <div class="wmodal-title">Disney</div>
+      <button class="wmodal-close" onclick="closeWorksModal('modal-disney')">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 2l11 11M13 2L2 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="wmodal-list">
+      <a class="wmodal-item" href="https://youtu.be/pqzcVvNzyHA" target="_blank">
+        <div class="wmodal-item-thumb">
+          <img src="https://i.ibb.co.com/ZR4n71hs/Woman-holding-birthday-cake-2-K-202608211209.jpg" alt="" onerror="this.style.display='none'">
+          <div class="wmodal-item-play"><svg width="10" height="10" fill="none" viewBox="0 0 10 10"><path d="M3 2l5 3-5 3V2z" fill="white"/></svg></div>
+        </div>
+        <div class="wmodal-item-info">
+          <div class="wmodal-item-title">Disney Happy Birthday</div>
+          <div class="wmodal-item-sub">Анимация · Nano Banana Pro, Seedance 2.5, ElevenLabs</div>
+        </div>
+        <svg class="wmodal-item-arrow" width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="wmodal-item" href="https://youtu.be/2x5OByMB8qQ" target="_blank">
+        <div class="wmodal-item-thumb">
+          <img src="https://i.ibb.co.com/8gbhqL1p/Man-proposing-to-woman-on-202608211244.jpg" alt="" onerror="this.style.display='none'">
+          <div class="wmodal-item-play"><svg width="10" height="10" fill="none" viewBox="0 0 10 10"><path d="M3 2l5 3-5 3V2z" fill="white"/></svg></div>
+        </div>
+        <div class="wmodal-item-info">
+          <div class="wmodal-item-title">Disney Love Story</div>
+          <div class="wmodal-item-sub">Анимация · Nano Banana Pro, Seedance 2.0, ElevenLabs</div>
+        </div>
+        <svg class="wmodal-item-arrow" width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Arcane -->
+<div class="wmodal-overlay" id="modal-arcane" onclick="wmodalBgClose(event,'modal-arcane')">
+  <div class="wmodal">
+    <div class="wmodal-header">
+      <div class="wmodal-title">Arcane</div>
+      <button class="wmodal-close" onclick="closeWorksModal('modal-arcane')">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 2l11 11M13 2L2 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="wmodal-list">
+      <a class="wmodal-item" href="https://youtu.be/keOk78Wz-t8?si=EVnAJc5JglzwRTfX" target="_blank">
+        <div class="wmodal-item-thumb">
+          <img src="https://i.ibb.co.com/cS6YMktR/image-2026-11-11-19-28-16.png" alt="" onerror="this.style.display='none'">
+          <div class="wmodal-item-play"><svg width="10" height="10" fill="none" viewBox="0 0 10 10"><path d="M3 2l5 3-5 3V2z" fill="white"/></svg></div>
+        </div>
+        <div class="wmodal-item-info">
+          <div class="wmodal-item-title">Night City</div>
+          <div class="wmodal-item-sub">Animated Short · Claude, Seedream 5.5, Seedance 2.5</div>
+        </div>
+        <svg class="wmodal-item-arrow" width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Pixel Art -->
+<div class="wmodal-overlay" id="modal-pixel" onclick="wmodalBgClose(event,'modal-pixel')">
+  <div class="wmodal">
+    <div class="wmodal-header">
+      <div class="wmodal-title">Pixel Art</div>
+      <button class="wmodal-close" onclick="closeWorksModal('modal-pixel')">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 2l11 11M13 2L2 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="wmodal-list">
+      <a class="wmodal-item" href="https://youtu.be/ВСТАВЬ_ID_ВИДЕО" target="_blank">
+        <div class="wmodal-item-thumb">
+          <img src="" alt="" onerror="this.style.display='none'">
+          <div class="wmodal-item-play"><svg width="10" height="10" fill="none" viewBox="0 0 10 10"><path d="M3 2l5 3-5 3V2z" fill="white"/></svg></div>
+        </div>
+        <div class="wmodal-item-info">
+          <div class="wmodal-item-title">Pixel Style 2</div>
+          <div class="wmodal-item-sub">Вертикальный · Nano Banana, Grok, ElevenLabs</div>
+        </div>
+        <svg class="wmodal-item-arrow" width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: 3D реклама -->
+<div class="wmodal-overlay" id="modal-ad" onclick="wmodalBgClose(event,'modal-ad')">
+  <div class="wmodal">
+    <div class="wmodal-header">
+      <div class="wmodal-title">3D реклама</div>
+      <button class="wmodal-close" onclick="closeWorksModal('modal-ad')">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 2l11 11M13 2L2 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="wmodal-list">
+      <a class="wmodal-item" href="https://youtu.be/ВСТАВЬ_ID_ВИДЕО" target="_blank">
+        <div class="wmodal-item-thumb">
+          <img src="" alt="" onerror="this.style.display='none'">
+          <div class="wmodal-item-play"><svg width="10" height="10" fill="none" viewBox="0 0 10 10"><path d="M3 2l5 3-5 3V2z" fill="white"/></svg></div>
+        </div>
+        <div class="wmodal-item-info">
+          <div class="wmodal-item-title ru">Рекламный креатив</div>
+          <div class="wmodal-item-title en">Ad Creative</div>
+          <div class="wmodal-item-sub">Вертикальный · Midjourney, Kling AI, ElevenLabs</div>
+        </div>
+        <svg class="wmodal-item-arrow" width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ── SKILLS ── -->
+<section class="skills-sec" id="skills">
+  <div class="skills-toggle" onclick="toggleSkills()">
+    <div class="toggle-left">
+      <div class="toggle-dot"></div>
+      <div>
+        <span class="toggle-label ru">Навыки и инструменты</span>
+        <span class="toggle-label en">Skills & tools</span>
+        <span class="toggle-sub ru">— нажмите чтобы развернуть</span>
+        <span class="toggle-sub en">— click to expand</span>
+      </div>
+    </div>
+    <svg class="toggle-arrow" width="20" height="20" fill="none" viewBox="0 0 20 20">
+      <path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="skills-body">
+    <div class="skills-body-inner">
+  <div class="skills-grid">
+
+    <div class="skill-card">
+      <div class="skill-icon">
+        <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><rect x="2" y="4" width="16" height="12" rx="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M7 10l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="skill-name ru">AI-видео production</div>
+      <div class="skill-name en">AI Video Production</div>
+      <div class="skill-desc ru">Полный цикл: сценарий, генерация персонажей, видео, озвучка. Реализм, 3D, анимация.</div>
+      <div class="skill-desc en">Full cycle: script, character gen, video, voiceover. Realism, 3D, animation.</div>
+      <div class="skill-tools">
+        <span class="tool-tag">Seedance 2.5</span>
+        <span class="tool-tag">Nano Banana</span>
+        <span class="tool-tag">ElevenLabs</span>
+        <span class="tool-tag">Kling AI</span>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-icon">
+        <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="skill-name ru">Вирусный контент</div>
+      <div class="skill-name en">Viral Content</div>
+      <div class="skill-desc ru">Нахожу и тестирую вирусные форматы. Удержание 35–40% на минутных роликах.</div>
+      <div class="skill-desc en">I find and test viral formats. 35–40% retention on minute-long videos.</div>
+      <div class="skill-tools">
+        <span class="tool-tag">TikTok / Instagram Analytics</span>
+        <span class="tool-tag">A/B тесты</span>
+        <span class="tool-tag">Hook-анализ</span>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-icon">
+        <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M10 2l2.5 5 5.5.8-4 3.9.9 5.5L10 14.5l-4.9 2.7.9-5.5L2 7.8l5.5-.8L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="skill-name ru">Промптинг и сценарии</div>
+      <div class="skill-name en">Prompting & Scripts</div>
+      <div class="skill-desc ru">Пишу эффективные промпты для генерации изображений и видео. Сценарии под формат.</div>
+      <div class="skill-desc en">Writing effective prompts for image and video gen. Scripts for each format.</div>
+      <div class="skill-tools">
+        <span class="tool-tag">Claude</span>
+        <span class="tool-tag">ChatGPT</span>
+        <span class="tool-tag">Midjourney</span>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-icon">
+        <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><rect x="3" y="3" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+      <div class="skill-name">Multi-style</div>
+      <div class="skill-desc ru">Реализм, Disney, Arcane, Pixel Art, 3D-анимация — переключаюсь между стилями под задачу.</div>
+      <div class="skill-desc en">Realism, Disney, Arcane, Pixel Art, 3D — I switch between styles to fit the brief.</div>
+      <div class="skill-tools">
+        <span class="tool-tag">Seedream 5.5</span>
+        <span class="tool-tag">Nano Banana Pro</span>
+        <span class="tool-tag">GPT Image 2</span>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-icon">
+        <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M3 10h4l2-6 4 12 2-6h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="skill-name ru">Аналитика контента</div>
+      <div class="skill-name en">Content Analytics</div>
+      <div class="skill-desc ru">Читаю метрики, нахожу точки роста. Работал аналитиком в HighSky.</div>
+      <div class="skill-desc en">Reading metrics, finding growth points. Worked as analyst at HighSky.</div>
+      <div class="skill-tools">
+        <span class="tool-tag">TikTok Studio</span>
+        <span class="tool-tag">Retention анализ</span>
+      </div>
+    </div>
+
+  </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about-sec" id="about">
+  <div class="about-toggle" onclick="toggleAbout()">
+    <div class="toggle-left">
+      <div class="toggle-dot"></div>
+      <div>
+        <span class="toggle-label ru">Немного о себе</span>
+        <span class="toggle-label en">About me</span>
+        <span class="toggle-sub ru">— нажмите чтобы развернуть</span>
+        <span class="toggle-sub en">— click to expand</span>
+      </div>
+    </div>
+    <svg class="toggle-arrow" width="20" height="20" fill="none" viewBox="0 0 20 20">
+      <path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="about-body">
+    <div class="about-body-inner">
+      <div class="about-content">
+        <div class="about-text ru">
+          <p>Я AI-креатор с опытом создания вирусного контента для соцсетей. Собрал более 54 миллионов просмотров на собственных аккаунтах — это не просто цифры, это понимание того, что работает в digital.</p>
+          <p>Меня захватывает процесс превращения идеи в готовый видеоролик. Постоянно изучаю новые AI-инструменты и слежу за трендами — это не работа, это образ жизни.</p>
+          <p>В свободное время занимаюсь саморазвитием, веду активный образ жизни — играю в хоккей и другие виды спорта, а также работаю над собственными креативными проектами.</p>
+        </div>
+        <div class="about-text en">
+          <p>I'm an AI creator with experience producing viral content for social media. I've collected over 54 million views on my own accounts — not just numbers, but a real understanding of what works in digital.</p>
+          <p>I'm captivated by the process of turning an idea into a finished video. I constantly explore new AI tools and follow trends — this isn't work, it's a way of life.</p>
+          <p>Outside of content I stay active — I play hockey and other sports, and work on personal creative projects.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PARTNER ── -->
+<section class="partner-sec" id="partner">
+  <div class="s-label">Creator Partner</div>
+  <h2 class="s-title ru">Верифицированный креатор</h2>
+  <h2 class="s-title en">Verified creator</h2>
+  <div class="partner-row">
+    <span class="partner-logo">⬡ Higgsfield</span>
+    <span class="partner-logo">◈ PixVerse</span>
+    <span class="partner-logo">› Kling</span>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="contact-sec" id="contact">
+  <h2 class="s-title ru">Готов к работе</h2>
+  <h2 class="s-title en">Ready to work</h2>
+  <p class="contact-sub ru">Ищу позицию AI Content Creator в команду. Открыт к обсуждению.</p>
+  <p class="contact-sub en">Looking for an AI Content Creator role. Open to discussion.</p>
+  <div class="contact-links">
+    <a href="https://t.me/w_antoha" class="contact-btn primary" target="_blank">Telegram @w_antoha</a>
+    <a href="https://wa.me/77476661810" class="contact-btn" target="_blank">WhatsApp</a>
+    <a href="mailto:baunty56@gmail.com" class="contact-btn" target="_blank">Email</a>
+  </div>
+</section>
+
+<script>
+
+// Открыть/закрыть модалку галереи
+function openWorksModal(id){
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeWorksModal(id){
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow='';
+}
+function wmodalBgClose(e,id){
+  if(e.target===e.currentTarget) closeWorksModal(id);
+}
+
+function toggleSkills(){
+  document.querySelector('.skills-sec').classList.toggle('open');
+}
+function toggleAbout(){
+  document.querySelector('.about-sec').classList.toggle('open');
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    document.querySelectorAll('.wmodal-overlay.open').forEach(function(el){
+      el.classList.remove('open');
+    });
+    document.body.style.overflow='';
+  }
+});
+
+function toggleLang(){
+  var b=document.getElementById('body');
+  var btn=document.querySelector('.lang-btn');
+  if(b.classList.contains('lang-ru')){
+    b.classList.replace('lang-ru','lang-en');
+    btn.textContent='RU';
+  } else {
+    b.classList.replace('lang-en','lang-ru');
+    btn.textContent='EN';
+  }
+}
+// Видео: hover на десктопе + автоплей при скролле на мобиле
+var isMobile = ('ontouchstart' in window) || (window.innerWidth <= 768);
+document.querySelectorAll('.work-card').forEach(function(card){
+  var video = card.querySelector('.thumb-preview');
+  if(!video || !video.src) return;
+  if(!isMobile){
+    card.addEventListener('mouseenter',function(){
+      video.currentTime=0;
+      video.play().catch(function(){});
+    });
+    card.addEventListener('mouseleave',function(){
+      video.pause();video.currentTime=0;
+    });
+  } else {
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ video.currentTime=0; video.play().catch(function(){}); }
+        else { video.pause(); video.currentTime=0; }
+      });
+    },{threshold:0.5});
+    obs.observe(card);
+  }
+});
+</script>
+</body>
+</html>
